@@ -68,6 +68,9 @@ RUN cd web && npm run build && \
 # The venv needs to be traversable too.
 USER root
 RUN chmod -R a+rX /opt/hermes
+# Ensure TUI dist directories are writable so the runtime staleness
+# check (_tui_need_npm_install) can rebuild without EACCES.
+RUN chmod -R a+w /opt/hermes/ui-tui/dist /opt/hermes/ui-tui/packages/hermes-ink/dist 2>/dev/null || true
 # Start as root so the entrypoint can usermod/groupmod + gosu.
 # If HERMES_UID is unset, the entrypoint drops to the default hermes user (10000).
 
